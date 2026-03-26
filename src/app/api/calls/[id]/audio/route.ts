@@ -43,6 +43,30 @@ export async function GET(
     m4a: "audio/mp4",
   };
   const contentType = mimeTypes[ext ?? ""] ?? "application/octet-stream";
+  const fileSize = stat.size;
+
+  // Handle range requests for proper audio seeking/playback
+  const range = req.headers.get("range");
+  if (range) {
+    const parts = range.replace(/bytes=/, "").split("-");
+    const start = parseInt(parts[0], 10);
+    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+    const chunkSize = end - start + 1;
+
+    const buffer = readFileSync(filePath);
+    const chunk = buffer.subarray(start, end + 1);
+
+    return new NextResponse(chunk, {
+      status: 206,
+      headers: {
+        "Content-Type": contentType,
+        "Content-Length": String(chunkSize),
+        "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+        "Accept-Ranges": "bytes",
+        "Cache-Control": "no-cache",
+      },
+    });
+  }
 
   const buffer = readFileSync(filePath);
 
@@ -50,8 +74,9 @@ export async function GET(
     status: 200,
     headers: {
       "Content-Type": contentType,
-      "Content-Length": String(stat.size),
+      "Content-Length": String(fileSize),
       "Accept-Ranges": "bytes",
+      "Cache-Control": "no-cache",
     },
   });
 }
