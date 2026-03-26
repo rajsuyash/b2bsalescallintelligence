@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("rep")
+  teamId    String?
+  team      Team?    @relation(fields: [teamId], references: [id])
+  calls     Call[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Team {
+  id        String   @id @default(cuid())
+  name      String
+  region    String
+  users     User[]
+  createdAt DateTime @default(now())
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  company   String
+  location  String?
+  phone     String?
+  calls     Call[]
+  createdAt DateTime @default(now())
+}
+
+model Call {
+  id                String      @id @default(cuid())
+  userId            String
+  user              User        @relation(fields: [userId], references: [id])
+  customerId        String
+  customer          Customer    @relation(fields: [customerId], references: [id])
+  status            String      @default("recording")
+  audioPath         String?
+  duration          Int?
+  outcomeLabel      String?
+  outcomeConfidence Float?
+  complaintSeverity String?
+  transcript        Transcript?
+  summary           Summary?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+model Transcript {
+  id        String   @id @default(cuid())
+  callId    String   @unique
+  call      Call     @relation(fields: [callId], references: [id])
+  text      String
+  createdAt DateTime @default(now())
+}
+
+model Summary {
+  id              String   @id @default(cuid())
+  callId          String   @unique
+  call            Call     @relation(fields: [callId], references: [id])
+  summaryText     String
+  extractedFields String?
+  overrideLabel   String?
+  overrideReason  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
