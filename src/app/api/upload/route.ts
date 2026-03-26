@@ -29,6 +29,9 @@ export async function POST(req: NextRequest) {
   const buffer = Buffer.from(await audio.arrayBuffer());
   const filename = `call_${Date.now()}.webm`;
   const uploadDir = path.join(process.cwd(), "public", "uploads");
+  // Ensure upload directory exists
+  const { mkdir } = await import("fs/promises");
+  await mkdir(uploadDir, { recursive: true });
   const filePath = path.join(uploadDir, filename);
   await writeFile(filePath, buffer);
 

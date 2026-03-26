@@ -3,7 +3,7 @@
 import { useAudioRecorder } from "@/hooks/use-audio-recorder";
 import { Button } from "@/components/ui/button";
 import { Mic, Square } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface AudioRecorderProps {
   onRecordingComplete: (blob: Blob, duration: number) => void;
@@ -19,11 +19,21 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
   const { status, startRecording, stopRecording, audioBlob, duration } =
     useAudioRecorder();
 
+  // Use refs to avoid stale closures in the effect
+  const onCompleteRef = useRef(onRecordingComplete);
+  onCompleteRef.current = onRecordingComplete;
+  const durationRef = useRef(duration);
+  durationRef.current = duration;
+  const calledRef = useRef(false);
+
   useEffect(() => {
-    if (status === "stopped" && audioBlob) {
-      onRecordingComplete(audioBlob, duration);
+    if (status === "stopped" && audioBlob && !calledRef.current) {
+      calledRef.current = true;
+      onCompleteRef.current(audioBlob, durationRef.current);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (status === "idle" || status === "recording") {
+      calledRef.current = false;
+    }
   }, [status, audioBlob]);
 
   return (

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface Customer {
   id: string;
@@ -114,6 +115,7 @@ export default function RecordPage() {
       router.push(`/dashboard/calls/${data.callId}`);
     } catch (error) {
       console.error("Upload failed:", error);
+      toast.error("Upload failed. Please try again.");
       setStep("record");
     }
   };
