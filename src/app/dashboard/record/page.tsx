@@ -143,7 +143,7 @@ export default function RecordPage() {
           </div>
 
           <Button
-            onClick={() => { setStep("record"); setRecordDuration(0); setTimerActive(true); }}
+            onClick={() => { setStep("record"); setRecordDuration(0); }}
             disabled={!selectedCustomerId}
             className="w-full h-14 bg-gradient-to-br from-primary to-blue-600 text-white rounded-full font-headline font-bold text-lg shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all"
           >
@@ -207,7 +207,7 @@ export default function RecordPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
         {/* Waveform & Controls */}
         <div className="lg:col-span-8 space-y-6 sm:space-y-8">
-          <AudioRecorder onRecordingComplete={handleRecordingComplete} />
+          <AudioRecorder onRecordingComplete={handleRecordingComplete} onRecordingStart={() => { setRecordDuration(0); setTimerActive(true); }} />
         </div>
 
         {/* Bookmarks Panel */}

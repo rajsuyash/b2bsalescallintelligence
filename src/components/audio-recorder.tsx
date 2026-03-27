@@ -6,6 +6,7 @@ import { useEffect, useRef, useMemo } from "react";
 
 interface AudioRecorderProps {
   onRecordingComplete: (blob: Blob, duration: number, fileExtension: string) => void;
+  onRecordingStart?: () => void;
 }
 
 function formatTime(seconds: number): string {
@@ -44,7 +45,7 @@ function WaveformVisualization({ isActive }: { isActive: boolean }) {
   );
 }
 
-export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
+export function AudioRecorder({ onRecordingComplete, onRecordingStart }: AudioRecorderProps) {
   const { status, startRecording, stopRecording, audioBlob, duration, fileExtension } =
     useAudioRecorder();
 
@@ -118,7 +119,7 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
         {/* Center action */}
         {status === "idle" || status === "stopped" ? (
           <button
-            onClick={startRecording}
+            onClick={() => { startRecording(); onRecordingStart?.(); }}
             className="px-8 sm:px-10 py-4 bg-gradient-to-br from-primary to-blue-600 text-white rounded-full font-headline font-bold text-base sm:text-lg shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-3"
           >
             <Mic className="h-5 w-5" />
