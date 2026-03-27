@@ -45,6 +45,10 @@ next-env.d.ts
 # uploads
 public/uploads/*.webm
 public/uploads/*.mp3
+public/uploads/*.mp4
+public/uploads/*.m4a
+public/uploads/*.aac
+public/uploads/*.ogg
 public/uploads/*.wav
 
 # database

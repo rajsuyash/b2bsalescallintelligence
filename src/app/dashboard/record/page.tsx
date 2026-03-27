@@ -72,14 +72,14 @@ export default function RecordPage() {
     return () => clearInterval(interval);
   }, [timerActive]);
 
-  const handleRecordingComplete = async (blob: Blob, duration: number) => {
+  const handleRecordingComplete = async (blob: Blob, duration: number, fileExtension: string = "webm") => {
     setTimerActive(false);
     setStep("processing");
     setStatusIndex(0);
 
     try {
       const formData = new FormData();
-      formData.append("audio", blob, "recording.webm");
+      formData.append("audio", blob, `recording.${fileExtension}`);
       formData.append("customerId", selectedCustomerId);
       formData.append("duration", duration.toString());
 

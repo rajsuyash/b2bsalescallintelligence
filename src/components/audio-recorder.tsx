@@ -5,7 +5,7 @@ import { Mic, MicOff, Pause, Play, StopCircle, Volume2 } from "lucide-react";
 import { useEffect, useRef, useMemo } from "react";
 
 interface AudioRecorderProps {
-  onRecordingComplete: (blob: Blob, duration: number) => void;
+  onRecordingComplete: (blob: Blob, duration: number, fileExtension: string) => void;
 }
 
 function formatTime(seconds: number): string {
@@ -45,19 +45,21 @@ function WaveformVisualization({ isActive }: { isActive: boolean }) {
 }
 
 export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
-  const { status, startRecording, stopRecording, audioBlob, duration } =
+  const { status, startRecording, stopRecording, audioBlob, duration, fileExtension } =
     useAudioRecorder();
 
   const onCompleteRef = useRef(onRecordingComplete);
   onCompleteRef.current = onRecordingComplete;
   const durationRef = useRef(duration);
   durationRef.current = duration;
+  const extensionRef = useRef(fileExtension);
+  extensionRef.current = fileExtension;
   const calledRef = useRef(false);
 
   useEffect(() => {
     if (status === "stopped" && audioBlob && !calledRef.current) {
       calledRef.current = true;
-      onCompleteRef.current(audioBlob, durationRef.current);
+      onCompleteRef.current(audioBlob, durationRef.current, extensionRef.current);
     }
     if (status === "idle" || status === "recording") {
       calledRef.current = false;

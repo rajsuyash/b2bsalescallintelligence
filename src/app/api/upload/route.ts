@@ -27,7 +27,8 @@ export async function POST(req: NextRequest) {
 
   // Save audio file
   const buffer = Buffer.from(await audio.arrayBuffer());
-  const filename = `call_${Date.now()}.webm`;
+  const ext = audio.name.split(".").pop() || "webm";
+  const filename = `call_${Date.now()}.${ext}`;
   const uploadDir = path.join(process.cwd(), "public", "uploads");
   // Ensure upload directory exists
   const { mkdir } = await import("fs/promises");
