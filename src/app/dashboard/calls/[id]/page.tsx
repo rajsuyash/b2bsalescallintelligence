@@ -128,7 +128,13 @@ export default function CallDetailPage() {
             <CardContent>
               {call.audioPath ? (
                 <div className="bg-slate-50 rounded-lg p-3">
-                  <audio controls className="w-full" src={`/api/calls/${call.id}/audio`}>
+                  <audio
+                    controls
+                    preload="metadata"
+                    playsInline
+                    className="w-full"
+                    src={`/api/calls/${call.id}/audio`}
+                  >
                     Your browser does not support the audio element.
                   </audio>
                 </div>
