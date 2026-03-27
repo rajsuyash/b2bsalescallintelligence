@@ -36,15 +36,25 @@ export async function POST(req: NextRequest) {
   await writeFile(filePath, buffer);
 
   // Create call record
-  const call = await prisma.call.create({
-    data: {
-      userId: session.user.id,
-      customerId,
-      status: "uploaded",
-      audioPath: `/uploads/${filename}`,
-      duration,
-    },
-  });
+  let call;
+  try {
+    call = await prisma.call.create({
+      data: {
+        userId: session.user.id,
+        customerId,
+        status: "uploaded",
+        audioPath: `/uploads/${filename}`,
+        duration,
+      },
+    });
+  } catch (dbError: unknown) {
+    console.error("DB error creating call:", dbError);
+    const message = dbError instanceof Error ? dbError.message : "Database error";
+    return NextResponse.json(
+      { error: `Failed to create call record. Please log out and log back in. (${message})` },
+      { status: 500 }
+    );
+  }
 
   try {
     // Transcribe

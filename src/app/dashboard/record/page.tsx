@@ -42,6 +42,7 @@ export default function RecordPage() {
   const [step, setStep] = useState<Step>("select-customer");
   const [statusIndex, setStatusIndex] = useState(0);
   const [recordDuration, setRecordDuration] = useState(0);
+  const [timerActive, setTimerActive] = useState(false);
 
   const selectedCustomer = customers.find((c) => c.id === selectedCustomerId);
 
@@ -62,16 +63,17 @@ export default function RecordPage() {
     return () => clearInterval(interval);
   }, [step]);
 
-  // Track duration while recording
+  // Track duration — only while timer is active
   useEffect(() => {
-    if (step !== "record") return;
+    if (!timerActive) return;
     const interval = setInterval(() => {
       setRecordDuration((prev) => prev + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [step]);
+  }, [timerActive]);
 
   const handleRecordingComplete = async (blob: Blob, duration: number) => {
+    setTimerActive(false);
     setStep("processing");
     setStatusIndex(0);
 
@@ -86,13 +88,16 @@ export default function RecordPage() {
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Upload failed");
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Upload failed");
+      }
 
       const data = await res.json();
       router.push(`/dashboard/calls/${data.callId}`);
     } catch (error) {
       console.error("Upload failed:", error);
-      toast.error("Upload failed. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Upload failed. Please try again.");
       setStep("record");
     }
   };
@@ -138,7 +143,7 @@ export default function RecordPage() {
           </div>
 
           <Button
-            onClick={() => { setStep("record"); setRecordDuration(0); }}
+            onClick={() => { setStep("record"); setRecordDuration(0); setTimerActive(true); }}
             disabled={!selectedCustomerId}
             className="w-full h-14 bg-gradient-to-br from-primary to-blue-600 text-white rounded-full font-headline font-bold text-lg shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all"
           >

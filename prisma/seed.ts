@@ -14,20 +14,21 @@ async function main() {
 
   const password = hashSync("demo123", 10);
 
-  // Create Teams
+  // Create Teams with deterministic IDs
   const eastTeam = await prisma.team.create({
-    data: { name: "East Region", region: "East" },
+    data: { id: "team-east-001", name: "East Region", region: "East" },
   });
   const northTeam = await prisma.team.create({
-    data: { name: "North Region", region: "North" },
+    data: { id: "team-north-001", name: "North Region", region: "North" },
   });
   const westTeam = await prisma.team.create({
-    data: { name: "West Region", region: "West" },
+    data: { id: "team-west-001", name: "West Region", region: "West" },
   });
 
-  // Create Users
+  // Create Users with deterministic IDs
   const admin = await prisma.user.create({
     data: {
+      id: "user-admin-priya",
       name: "Priya Sharma",
       email: "priya@ushamartin.com",
       password,
@@ -38,6 +39,7 @@ async function main() {
 
   const manager = await prisma.user.create({
     data: {
+      id: "user-manager-rajesh",
       name: "Rajesh Kumar",
       email: "rajesh@ushamartin.com",
       password,
@@ -48,6 +50,7 @@ async function main() {
 
   const rep1 = await prisma.user.create({
     data: {
+      id: "user-rep-amit",
       name: "Amit Patel",
       email: "amit@ushamartin.com",
       password,
@@ -58,6 +61,7 @@ async function main() {
 
   const rep2 = await prisma.user.create({
     data: {
+      id: "user-rep-sneha",
       name: "Sneha Reddy",
       email: "sneha@ushamartin.com",
       password,
@@ -68,6 +72,7 @@ async function main() {
 
   const rep3 = await prisma.user.create({
     data: {
+      id: "user-rep-vikram",
       name: "Vikram Singh",
       email: "vikram@ushamartin.com",
       password,
@@ -76,31 +81,31 @@ async function main() {
     },
   });
 
-  // Create Customers
+  // Create Customers with deterministic IDs
   const customers = await Promise.all([
     prisma.customer.create({
-      data: { name: "Suresh Mehta", company: "Tata Projects", location: "Mumbai", phone: "+91-9876543210" },
+      data: { id: "cust-tata-001", name: "Suresh Mehta", company: "Tata Projects", location: "Mumbai", phone: "+91-9876543210" },
     }),
     prisma.customer.create({
-      data: { name: "Anil Gupta", company: "L&T Construction", location: "Chennai", phone: "+91-9876543211" },
+      data: { id: "cust-lnt-001", name: "Anil Gupta", company: "L&T Construction", location: "Chennai", phone: "+91-9876543211" },
     }),
     prisma.customer.create({
-      data: { name: "Ramesh Agarwal", company: "Jindal Steel", location: "Delhi", phone: "+91-9876543212" },
+      data: { id: "cust-jindal-001", name: "Ramesh Agarwal", company: "Jindal Steel", location: "Delhi", phone: "+91-9876543212" },
     }),
     prisma.customer.create({
-      data: { name: "Deepak Joshi", company: "Ambuja Cements", location: "Ahmedabad", phone: "+91-9876543213" },
+      data: { id: "cust-ambuja-001", name: "Deepak Joshi", company: "Ambuja Cements", location: "Ahmedabad", phone: "+91-9876543213" },
     }),
     prisma.customer.create({
-      data: { name: "Kiran Desai", company: "Godrej Properties", location: "Pune", phone: "+91-9876543214" },
+      data: { id: "cust-godrej-001", name: "Kiran Desai", company: "Godrej Properties", location: "Pune", phone: "+91-9876543214" },
     }),
     prisma.customer.create({
-      data: { name: "Manoj Tiwari", company: "Adani Infra", location: "Gandhinagar", phone: "+91-9876543215" },
+      data: { id: "cust-adani-001", name: "Manoj Tiwari", company: "Adani Infra", location: "Gandhinagar", phone: "+91-9876543215" },
     }),
     prisma.customer.create({
-      data: { name: "Sanjay Verma", company: "UltraTech Cement", location: "Kolkata", phone: "+91-9876543216" },
+      data: { id: "cust-ultratech-001", name: "Sanjay Verma", company: "UltraTech Cement", location: "Kolkata", phone: "+91-9876543216" },
     }),
     prisma.customer.create({
-      data: { name: "Prakash Rao", company: "JSW Steel", location: "Bangalore", phone: "+91-9876543217" },
+      data: { id: "cust-jsw-001", name: "Prakash Rao", company: "JSW Steel", location: "Bangalore", phone: "+91-9876543217" },
     }),
   ]);
 
