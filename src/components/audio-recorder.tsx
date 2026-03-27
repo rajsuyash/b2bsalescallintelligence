@@ -25,7 +25,7 @@ function WaveformVisualization({ isActive }: { isActive: boolean }) {
   }, []);
 
   return (
-    <div className="flex items-center justify-center h-40 gap-[3px]">
+    <div className="flex items-center justify-center h-24 sm:h-40 gap-[3px]">
       {bars.map((bar, i) => (
         <div
           key={i}
@@ -69,9 +69,9 @@ export function AudioRecorder({ onRecordingComplete }: AudioRecorderProps) {
   const isRecording = status === "recording";
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 sm:space-y-8">
       {/* Waveform Canvas */}
-      <div className="h-80 bg-white rounded-xl flex items-center justify-center overflow-hidden relative shadow-sm">
+      <div className="h-44 sm:h-80 bg-white rounded-xl flex items-center justify-center overflow-hidden relative shadow-sm">
         <WaveformVisualization isActive={isRecording} />
 
         {/* Gradient overlay */}

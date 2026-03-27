@@ -175,11 +175,11 @@ export default function RecordPage() {
 
   // Step 2: Recording (main designer view)
   return (
-    <div className="max-w-6xl mx-auto space-y-8 sm:space-y-12 py-4 sm:py-8">
+    <div className="max-w-6xl mx-auto space-y-4 sm:space-y-12 py-2 sm:py-8">
       {/* Header Status */}
-      <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 mb-4">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-2 sm:gap-4">
+        <div className="space-y-1 sm:space-y-2">
+          <div className="flex items-center gap-2 mb-1 sm:mb-4">
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75" />
               <span className="relative inline-flex rounded-full h-3 w-3 bg-destructive" />
@@ -188,16 +188,16 @@ export default function RecordPage() {
               Live Recording
             </span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-headline font-extrabold text-slate-900 tracking-tighter leading-none">
+          <h2 className="text-2xl sm:text-5xl font-headline font-extrabold text-slate-900 tracking-tighter leading-none">
             {selectedCustomer?.company ?? "Call Recording"}
           </h2>
-          <p className="text-base sm:text-lg text-slate-500">
+          <p className="text-sm sm:text-lg text-slate-500">
             Sales Call • {selectedCustomer?.name}
           </p>
         </div>
         <div className="text-left sm:text-right">
           <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold mb-1">Duration</p>
-          <p className="text-4xl sm:text-5xl font-headline font-extrabold text-slate-900 tracking-tighter tabular-nums">
+          <p className="text-3xl sm:text-5xl font-headline font-extrabold text-slate-900 tracking-tighter tabular-nums">
             {formatTime(recordDuration)}
           </p>
         </div>
