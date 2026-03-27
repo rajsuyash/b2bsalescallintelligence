@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,6 +45,8 @@ export default function CallDetailPage() {
   const [editedSummary, setEditedSummary] = useState("");
   const [outcomeOverride, setOutcomeOverride] = useState("");
   const [overrideReason, setOverrideReason] = useState("");
+  const [audioBlobUrl, setAudioBlobUrl] = useState<string | null>(null);
+  const audioBlobUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
     fetch(`/api/calls/${callId}`)
@@ -57,6 +59,33 @@ export default function CallDetailPage() {
       .catch((err) => console.error("Failed to fetch call:", err))
       .finally(() => setLoading(false));
   }, [callId]);
+
+  // Fetch audio via fetch() so session cookies are sent on mobile browsers
+  useEffect(() => {
+    if (!call?.audioPath) return;
+    let cancelled = false;
+
+    fetch(`/api/calls/${call.id}/audio`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load audio");
+        return res.blob();
+      })
+      .then((blob) => {
+        if (cancelled) return;
+        const url = URL.createObjectURL(blob);
+        audioBlobUrlRef.current = url;
+        setAudioBlobUrl(url);
+      })
+      .catch((err) => console.error("Audio blob fetch failed:", err));
+
+    return () => {
+      cancelled = true;
+      if (audioBlobUrlRef.current) {
+        URL.revokeObjectURL(audioBlobUrlRef.current);
+        audioBlobUrlRef.current = null;
+      }
+    };
+  }, [call?.id, call?.audioPath]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -128,15 +157,22 @@ export default function CallDetailPage() {
             <CardContent>
               {call.audioPath ? (
                 <div className="bg-slate-50 rounded-lg p-3">
-                  <audio
-                    controls
-                    preload="metadata"
-                    playsInline
-                    className="w-full"
-                    src={`/api/calls/${call.id}/audio`}
-                  >
-                    Your browser does not support the audio element.
-                  </audio>
+                  {audioBlobUrl ? (
+                    <audio
+                      controls
+                      preload="metadata"
+                      playsInline
+                      className="w-full"
+                      src={audioBlobUrl}
+                    >
+                      Your browser does not support the audio element.
+                    </audio>
+                  ) : (
+                    <div className="flex items-center justify-center h-12 text-sm text-muted-foreground">
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Loading audio...
+                    </div>
+                  )}
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground italic">
