@@ -7,9 +7,11 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-inter);
+  --font-body: var(--font-inter);
+  --font-headline: var(--font-manrope);
+  --font-heading: var(--font-manrope);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,38 +51,38 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: #f8f9fb;
+  --foreground: #191c1e;
+  --card: #ffffff;
+  --card-foreground: #191c1e;
+  --popover: #ffffff;
+  --popover-foreground: #191c1e;
+  --primary: #003ec7;
+  --primary-foreground: #ffffff;
+  --secondary: #f2f4f6;
+  --secondary-foreground: #191c1e;
+  --muted: #edeef0;
+  --muted-foreground: #737688;
+  --accent: #edeef0;
+  --accent-foreground: #191c1e;
+  --destructive: #ba1a1a;
+  --border: #e1e2e4;
+  --input: #e1e2e4;
+  --ring: #003ec7;
+  --chart-1: #003ec7;
+  --chart-2: #005569;
+  --chart-3: #4f5e7e;
+  --chart-4: #006f89;
+  --chart-5: #0052ff;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #f8f9fb;
+  --sidebar-foreground: #191c1e;
+  --sidebar-primary: #003ec7;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #edeef0;
+  --sidebar-accent-foreground: #191c1e;
+  --sidebar-border: #e1e2e4;
+  --sidebar-ring: #003ec7;
 }
 
 .dark {
@@ -90,8 +92,8 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: #b7c4ff;
+  --primary-foreground: #001452;
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -131,42 +133,33 @@
 
 /* Custom keyframe animations */
 @keyframes slideInLeft {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes recordingGlow {
-  0%, 100% {
-    box-shadow: 0 0 8px 2px rgba(239, 68, 68, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 20px 6px rgba(239, 68, 68, 0.7);
-  }
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(186, 26, 26, 0.3); }
+  50% { box-shadow: 0 0 24px 8px rgba(186, 26, 26, 0.6); }
 }
 
-.animate-slide-in-left {
-  animation: slideInLeft 0.3s ease-out;
+@keyframes waveform {
+  0%, 100% { height: 12px; }
+  50% { height: var(--wave-height, 32px); }
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.4s ease-out both;
-}
+.animate-slide-in-left { animation: slideInLeft 0.3s ease-out; }
+.animate-fade-in-up { animation: fadeInUp 0.4s ease-out both; }
+.animate-recording-glow { animation: recordingGlow 1.5s ease-in-out infinite; }
 
-.animate-recording-glow {
-  animation: recordingGlow 1.5s ease-in-out infinite;
+.waveform-bar {
+  width: 4px;
+  background: #003ec7;
+  border-radius: 9999px;
+  margin: 0 2px;
+  animation: waveform 1.2s ease-in-out infinite;
 }

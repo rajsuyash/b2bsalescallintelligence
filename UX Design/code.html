@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CRM Sync &amp; Confirmation | SalesPulse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary": "#ffffff",
+                        "outline": "#737688",
+                        "surface-container-low": "#f2f4f6",
+                        "tertiary-container": "#006f89",
+                        "on-secondary-fixed-variant": "#374765",
+                        "inverse-primary": "#b7c4ff",
+                        "surface-dim": "#d9dadc",
+                        "on-surface": "#191c1e",
+                        "on-primary-fixed": "#001452",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e7e8ea",
+                        "inverse-on-surface": "#f0f1f3",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#001f28",
+                        "primary": "#003ec7",
+                        "surface-bright": "#f8f9fb",
+                        "on-tertiary-container": "#bcecff",
+                        "on-primary-container": "#dfe3ff",
+                        "background": "#f8f9fb",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#4cd6ff",
+                        "on-tertiary-fixed-variant": "#004e60",
+                        "tertiary": "#005569",
+                        "surface-container-highest": "#e1e2e4",
+                        "on-secondary-container": "#505f7f",
+                        "primary-container": "#0052ff",
+                        "secondary-fixed": "#d7e2ff",
+                        "surface-container": "#edeef0",
+                        "inverse-surface": "#2e3132",
+                        "surface": "#f8f9fb",
+                        "surface-tint": "#004ced",
+                        "on-background": "#191c1e",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#4f5e7e",
+                        "tertiary-fixed": "#b7eaff",
+                        "on-surface-variant": "#434656",
+                        "outline-variant": "#c3c5d9",
+                        "primary-fixed": "#dde1ff",
+                        "secondary-fixed-dim": "#b7c7eb",
+                        "surface-variant": "#e1e2e4",
+                        "secondary-container": "#cadaff",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#0038b6",
+                        "on-secondary-fixed": "#091b37"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "1rem", "xl": "1.25rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .signature-gradient {
+            background: linear-gradient(135deg, #003ec7 0%, #0052ff 100%);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface antialiased">
+<!-- SideNavBar (Shared Component) -->
+<aside class="flex flex-col h-full border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-manrope font-semibold text-sm tracking-wide h-screen w-64 fixed left-0 top-0 z-50">
+<div class="p-8">
+<h1 class="text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tighter">SalesPulse</h1>
+<p class="text-[10px] text-on-surface-variant/60 uppercase tracking-[0.2em] mt-1">Executive Suite</p>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="mic_none">mic_none</span>
+                My Calls
+            </a>
+<!-- Active State: CRM Sync -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-blue-700 dark:text-blue-400 font-bold border-r-4 border-blue-700 dark:border-blue-400 bg-slate-200/50 dark:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+                CRM Sync
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="p-4 mt-auto">
+<button class="w-full signature-gradient text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                New Meeting
+            </button>
+<div class="flex items-center gap-3 mt-8 px-4">
+<img alt="User profile photo" class="w-10 h-10 rounded-full bg-surface-container-high" data-alt="professional portrait of a sales executive in a modern office, soft bokeh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYMgNGUpGw2ryF5VxvCfENiEF-Yj4x2Tp_bu6q_Mxs0by0AHDJ9UG5zRfAEqQv7oFNhrcDYrclj-9eUKO86kKefBcxFOGbP9gNmKO9Owy12-c8d7POq0gB0I0iOdLVaurp3oSuZPs8dooHZzglaITxj1_lDFupOSWNk7iB2QKjOE2z9pQNYV_BJ3drGoTncTClj_FFHPN4Wo4I3DLpeiTzHAGZNjOdatCKzN-jDNcBpymfibfyzj-4JUOIevb6KsUkZah64fYXQ-A"/>
+<div>
+<p class="font-bold text-on-surface">Alex Rivera</p>
+<p class="text-xs text-on-surface-variant">Account Executive</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Shared Component) -->
+<header class="flex justify-between items-center h-16 px-8 ml-64 fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 font-manrope font-medium text-base">
+<div class="flex items-center gap-4 bg-surface-container-low px-4 py-2 rounded-full w-96">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full" placeholder="Search calls or leads..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-blue-600 transition-all"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="hover:text-blue-600 transition-all"><span class="material-symbols-outlined" data-icon="help_outline">help_outline</span></button>
+</div>
+<button class="bg-surface-container-highest px-6 py-2 rounded-full font-bold text-on-surface hover:bg-surface-container-high transition-all active:scale-98">
+                Start Recording
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-16 pb-16 min-h-screen">
+<!-- Breadcrumbs & Header -->
+<div class="mb-12">
+<div class="flex items-center gap-2 text-label-md text-on-surface-variant font-label tracking-widest uppercase mb-4">
+<span>My Calls</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span>Product Demo - Global Systems</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-bold">Sync to Salesforce</span>
+</div>
+<h2 class="font-headline text-[3.5rem] leading-none font-extrabold tracking-tighter text-on-surface mb-4">Review &amp; Push</h2>
+<p class="text-on-surface-variant text-lg max-w-2xl font-body">Finalize the meeting metadata and transcript summaries before updating your CRM records. Precision ensures better forecasting.</p>
+</div>
+<!-- Bento Grid Layout for CRM Mapping -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: CRM Mapping & Entity Matching -->
+<div class="col-span-12 lg:col-span-5 space-y-8">
+<section class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border-none">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<div class="p-3 bg-secondary-container rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="hub">hub</span>
+</div>
+<h3 class="font-headline font-bold text-xl">CRM Entity Matching</h3>
+</div>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full text-xs font-bold font-label">AUTO-MATCHED</span>
+</div>
+<div class="space-y-6">
+<!-- Field: Account -->
+<div class="space-y-2">
+<label class="block text-xs font-label font-bold text-on-surface-variant tracking-wider uppercase">Matching Account</label>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-white flex items-center justify-center shadow-sm">
+<img alt="Global Systems Logo" class="w-6 h-6" data-alt="minimalist corporate logo for a technology company, blue and grey geometric shape" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVJGvCkGJ7elfpK4hUgFEfy7wjzXimc7SgcceEFZtAzztp9hV9hyTRCKoGueDT6-vs4SlXQiZUezXGsdAXkE3zoY6QoUxRwO8GMUJMYUxOXpreIyGnjEOf3CcWZevbBpokLwpO0X5lTo5Wz7y2tB301_XTREaqSs7FPDuyYjkezuYyaEZMnMzwSO9GTxujUu7RJ-GD-y0xwxax7L9PJzy8ioKOQygDlb9KNIsFolrtK-MTvcjDl5XEEi9MSjg4OPC5bAuiglZSzpw"/>
+</div>
+<div>
+<p class="font-bold">Global Systems Inc.</p>
+<p class="text-xs text-on-surface-variant">ID: 0015G00002X9zQ</p>
+</div>
+</div>
+<button class="text-primary text-sm font-bold hover:underline">Change</button>
+</div>
+</div>
+<!-- Field: Contact -->
+<div class="space-y-2">
+<label class="block text-xs font-label font-bold text-on-surface-variant tracking-wider uppercase">Primary Contact</label>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<img alt="Sarah Koenig avatar" class="w-10 h-10 rounded-full" data-alt="professional headshot of a female executive with glasses, friendly expression, natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7E4SoKKnvKGHePhUHe_SZhsSL8C3R4gyDCvVNZoZknP-pxcFkvoOpiSHbXf4u2Oix2WRk5GA1xBOJ_qtCQZdkOYTtR2X-Jt6OFIlvIxpBT0UZBhc-Byr4u4vXTU7PHTA90w-GMIsWHYeEC1lOGVpOu2J1Ki6K0tcFSQamruu5l0Q1Eco6bkNdCI-chh72zCmTwv1wg71vi96-6ta7aFEBdxXPweGQKJITQcOM5YDgZlRPU-IrcmVigMCyspzSgw4WU58iF8QLRkk"/>
+<div>
+<p class="font-bold">Sarah Koenig</p>
+<p class="text-xs text-on-surface-variant">CTO | sarah.k@globalsys.com</p>
+</div>
+</div>
+<button class="text-primary text-sm font-bold hover:underline">Change</button>
+</div>
+</div>
+<!-- Field: Opportunity -->
+<div class="space-y-2">
+<label class="block text-xs font-label font-bold text-on-surface-variant tracking-wider uppercase">Related Opportunity</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg p-4 font-body focus:ring-2 focus:ring-primary">
+<option>Expansion - Q3 Enterprise License</option>
+<option>Initial Software Pilot</option>
+<option>Service Renewal 2024</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Sync Settings Card -->
+<section class="bg-surface-container-low p-8 rounded-xl">
+<h3 class="font-headline font-bold text-lg mb-6">Sync Options</h3>
+<div class="space-y-4">
+<label class="flex items-center gap-4 cursor-pointer group">
+<input checked="" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<div>
+<p class="font-bold text-on-surface group-hover:text-primary transition-colors">Attach Full Transcript</p>
+<p class="text-xs text-on-surface-variant">As a .pdf attachment in 'Files'</p>
+</div>
+</label>
+<label class="flex items-center gap-4 cursor-pointer group">
+<input checked="" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<div>
+<p class="font-bold text-on-surface group-hover:text-primary transition-colors">Create Follow-up Task</p>
+<p class="text-xs text-on-surface-variant">Set for 2 days from now</p>
+</div>
+</label>
+<label class="flex items-center gap-4 cursor-pointer group">
+<input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<div>
+<p class="font-bold text-on-surface group-hover:text-primary transition-colors">Notify Account Owner</p>
+<p class="text-xs text-on-surface-variant">Email alert to Mark Thompson</p>
+</div>
+</label>
+</div>
+</section>
+</div>
+<!-- Right Column: Notes & Summary Refinement -->
+<div class="col-span-12 lg:col-span-7 space-y-8">
+<section class="bg-surface-container-lowest p-10 rounded-xl shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<div class="p-3 bg-primary-fixed rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="description">description</span>
+</div>
+<h3 class="font-headline font-bold text-xl">Meeting Documentation</h3>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-on-surface-variant">AI Confidence:</span>
+<div class="flex gap-1">
+<div class="w-4 h-1 bg-primary rounded-full"></div>
+<div class="w-4 h-1 bg-primary rounded-full"></div>
+<div class="w-4 h-1 bg-primary rounded-full"></div>
+<div class="w-4 h-1 bg-outline-variant rounded-full opacity-30"></div>
+</div>
+</div>
+</div>
+<div class="space-y-8">
+<!-- AI Summary Refinement -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<label class="block text-xs font-label font-bold text-on-surface-variant tracking-wider uppercase">Executive Summary</label>
+<button class="text-xs text-primary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="auto_fix">auto_fix</span>
+                                    Regenerate
+                                </button>
+</div>
+<textarea class="w-full bg-surface-container-low border-none rounded-xl p-6 font-body text-base leading-relaxed focus:ring-2 focus:ring-primary-container" rows="5">Sarah was impressed with the new dashboard automation features. Main concerns revolve around the legacy API integration timeline. She requested a follow-up with their technical lead next Tuesday to dive deeper into security protocols. We agreed on a 15% discount if the contract is signed by EOQ.</textarea>
+</div>
+<!-- Key Action Items -->
+<div class="space-y-3">
+<label class="block text-xs font-label font-bold text-on-surface-variant tracking-wider uppercase">Key Action Items</label>
+<div class="bg-surface-container-low rounded-xl p-2">
+<div class="flex items-center gap-4 p-4 border-b border-surface-container-highest last:border-0">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<input class="bg-transparent border-none focus:ring-0 p-0 w-full text-on-surface" type="text" value="Send Security Whitepaper by Friday"/>
+</div>
+<div class="flex items-center gap-4 p-4 border-b border-surface-container-highest last:border-0">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<input class="bg-transparent border-none focus:ring-0 p-0 w-full text-on-surface" type="text" value="Schedule tech deep-dive with Greg"/>
+</div>
+<div class="flex items-center gap-4 p-4 border-b border-surface-container-highest last:border-0">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle">check_circle</span>
+<input class="bg-transparent border-none focus:ring-0 p-0 w-full text-on-surface" type="text" value="Draft revised quote for 500 seats"/>
+</div>
+<button class="flex items-center gap-2 p-4 text-primary text-sm font-bold hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                                    Add custom action item
+                                </button>
+</div>
+</div>
+<!-- Manual Notes / Context -->
+<div class="space-y-3">
+<label class="block text-xs font-label font-bold text-on-surface-variant tracking-wider uppercase">Private Seller Notes (Not Synced)</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-xl p-6 font-body italic text-on-surface-variant focus:ring-2 focus:ring-outline-variant" placeholder="Add internal-only notes here..." rows="3">Sarah mentioned they are also looking at Gong. Need to emphasize our real-time coaching advantage.</textarea>
+</div>
+</div>
+</section>
+<!-- Final Actions -->
+<div class="flex items-center justify-end gap-6 pt-4">
+<button class="text-on-surface-variant font-bold px-8 py-4 hover:text-on-surface transition-colors">Discard Draft</button>
+<button class="signature-gradient text-white font-bold px-12 py-4 rounded-full flex items-center gap-3 shadow-xl hover:shadow-2xl transition-all active:scale-95 group">
+                        Confirm &amp; Push to Salesforce
+                        <span class="material-symbols-outlined transition-transform group-hover:translate-x-1" data-icon="rocket_launch">rocket_launch</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Success Preview Modal (Conditional Mockup) -->
+<div class="mt-20 border-t border-slate-200 pt-16 opacity-40 hover:opacity-100 transition-opacity">
+<p class="text-center text-xs font-label font-bold tracking-[0.3em] uppercase text-on-surface-variant mb-12">Success State Preview</p>
+<div class="max-w-xl mx-auto glass-panel p-12 rounded-[2rem] text-center shadow-2xl relative overflow-hidden">
+<!-- Decorative background elements for success -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-tertiary-fixed rounded-full blur-[60px] opacity-20"></div>
+<div class="relative z-10">
+<div class="w-20 h-20 signature-gradient rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
+<span class="material-symbols-outlined text-white text-4xl" data-icon="done_all" style="font-variation-settings: 'wght' 700;">done_all</span>
+</div>
+<h4 class="font-headline font-black text-3xl mb-4">Sync Successful!</h4>
+<p class="text-on-surface-variant mb-8">Data for <strong>Product Demo - Global Systems</strong> has been pushed to Salesforce Opportunity <strong>#OP-9921</strong>.</p>
+<div class="bg-surface-container-low rounded-xl p-6 mb-8 flex items-center justify-between text-left">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+<img alt="Salesforce Cloud Logo" data-alt="salesforce iconic blue cloud logo on white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANARw59Gql5QCa6LmKgVWWLROisl9B_hz3L_GZ5AunA2lNkdJiGaKkwCjq70xXCJ6xZlSHFqhGfPxYFOv-4VqfT6paXHLd-p2s9XBfnWUNdzpF_lYDGT8-3w24XlzLudkvLprz1mwCb58hl-XnoyW86VqeLHHhBBdFjlgOsyod1KM4WwxoUw4fygvqEhjP_MCm-tkBh5aLQGM8E9ShkuUTTv7Qd7bGAtYQG2uvHPYmOgxXJveSPCvvhoLY-xXpGNRNDobn_BoA-fE"/>
+</div>
+<div>
+<p class="text-xs font-label font-bold uppercase tracking-wider text-on-surface-variant">Destination</p>
+<p class="font-bold">Salesforce Production</p>
+</div>
+</div>
+<a class="text-primary font-bold text-sm flex items-center gap-1" href="#">
+                            View Record
+                            <span class="material-symbols-outlined text-sm" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+<button class="bg-surface-container-highest w-full py-4 rounded-full font-bold hover:bg-surface-container-high transition-colors">
+                        Return to Dashboard
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Suppressed on this transactional screen as per protocol, but defined if needed for primary nav screens) -->
+</body></html>

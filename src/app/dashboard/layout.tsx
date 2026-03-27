@@ -14,11 +14,11 @@ export default function DashboardLayout({
 
   return (
     <SessionProvider>
-      <div className="flex min-h-screen bg-slate-50">
+      <div className="flex min-h-screen bg-background">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <div className="flex-1 flex flex-col min-w-0">
           <Topbar onMenuToggle={() => setSidebarOpen((prev) => !prev)} />
-          <main className="flex-1 p-4 sm:p-6">{children}</main>
+          <main className="flex-1 p-4 sm:p-8">{children}</main>
         </div>
       </div>
     </SessionProvider>

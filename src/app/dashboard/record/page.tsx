@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AudioRecorder } from "@/components/audio-recorder";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -12,8 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AlertTriangle, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { AlertTriangle, Loader2, User, Building2, Zap } from "lucide-react";
 import { toast } from "sonner";
 
 interface Customer {
@@ -30,44 +28,11 @@ const STATUS_MESSAGES = [
   "Summarizing...",
 ];
 
-const STEP_LABELS = [
-  { key: "select-customer", label: "Select" },
-  { key: "record", label: "Record" },
-  { key: "processing", label: "Process" },
-];
-
-function StepIndicator({ currentStep }: { currentStep: Step }) {
-  const stepIndex = STEP_LABELS.findIndex((s) => s.key === currentStep);
-
-  return (
-    <div className="flex items-center justify-center w-full px-4 sm:px-0">
-      {STEP_LABELS.map((s, i) => (
-        <div key={s.key} className="flex items-center">
-          <div className="flex flex-col items-center">
-            <div
-              className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors",
-                i <= stepIndex
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-200 text-slate-500"
-              )}
-            >
-              {i + 1}
-            </div>
-            <span className="text-xs mt-1 text-slate-500 font-medium">{s.label}</span>
-          </div>
-          {i < STEP_LABELS.length - 1 && (
-            <div
-              className={cn(
-                "w-12 sm:w-20 h-0.5 mx-2 mb-5 transition-colors",
-                i < stepIndex ? "bg-blue-600" : "bg-slate-200"
-              )}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  );
+function formatTime(seconds: number): string {
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  return `${hrs > 0 ? hrs.toString().padStart(2, "0") + ":" : ""}${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 }
 
 export default function RecordPage() {
@@ -76,6 +41,9 @@ export default function RecordPage() {
   const [selectedCustomerId, setSelectedCustomerId] = useState("");
   const [step, setStep] = useState<Step>("select-customer");
   const [statusIndex, setStatusIndex] = useState(0);
+  const [recordDuration, setRecordDuration] = useState(0);
+
+  const selectedCustomer = customers.find((c) => c.id === selectedCustomerId);
 
   useEffect(() => {
     fetch("/api/customers")
@@ -91,6 +59,15 @@ export default function RecordPage() {
         prev < STATUS_MESSAGES.length - 1 ? prev + 1 : prev
       );
     }, 3000);
+    return () => clearInterval(interval);
+  }, [step]);
+
+  // Track duration while recording
+  useEffect(() => {
+    if (step !== "record") return;
+    const interval = setInterval(() => {
+      setRecordDuration((prev) => prev + 1);
+    }, 1000);
     return () => clearInterval(interval);
   }, [step]);
 
@@ -120,24 +97,25 @@ export default function RecordPage() {
     }
   };
 
-  return (
-    <div className="max-w-2xl mx-auto space-y-6 w-full px-4 sm:px-0">
-      <h1 className="text-2xl font-bold">Record a Call</h1>
+  // Step 1: Customer Selection
+  if (step === "select-customer") {
+    return (
+      <div className="max-w-2xl mx-auto space-y-8 py-8">
+        <div className="space-y-2">
+          <h2 className="text-4xl font-headline font-extrabold text-slate-900 tracking-tighter">
+            New Call Recording
+          </h2>
+          <p className="text-lg text-slate-500">Select a customer to begin recording</p>
+        </div>
 
-      <StepIndicator currentStep={step} />
-
-      {/* Step 1: Select Customer */}
-      {step === "select-customer" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Select Customer</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="bg-white rounded-xl p-8 shadow-sm space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Customer</label>
             <Select
               value={selectedCustomerId}
               onValueChange={(val) => setSelectedCustomerId(val ?? "")}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-14 text-base">
                 <SelectValue placeholder="Choose a customer..." />
               </SelectTrigger>
               <SelectContent>
@@ -148,53 +126,164 @@ export default function RecordPage() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
 
-            {/* Consent banner */}
-            <div className="flex items-start gap-3 rounded-md border border-amber-200 bg-amber-50 p-4">
-              <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
-              <p className="text-sm text-amber-800">
-                This call will be recorded for quality assurance. Please ensure
-                all participants have been informed and have given their consent.
-              </p>
-            </div>
+          {/* Consent banner */}
+          <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
+            <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
+            <p className="text-sm text-amber-800">
+              This call will be recorded for quality assurance. Please ensure
+              all participants have been informed and have given their consent.
+            </p>
+          </div>
 
-            <Button
-              onClick={() => setStep("record")}
-              disabled={!selectedCustomerId}
-              className="w-full"
-            >
-              Continue to Recording
-            </Button>
-          </CardContent>
-        </Card>
-      )}
+          <Button
+            onClick={() => { setStep("record"); setRecordDuration(0); }}
+            disabled={!selectedCustomerId}
+            className="w-full h-14 bg-gradient-to-br from-primary to-blue-600 text-white rounded-full font-headline font-bold text-lg shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all"
+          >
+            Continue to Recording
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
-      {/* Step 2: Record */}
-      {step === "record" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Recording</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <AudioRecorder onRecordingComplete={handleRecordingComplete} />
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Step 3: Processing */}
-      {step === "processing" && (
-        <Card>
-          <CardContent className="flex flex-col items-center gap-4 py-12">
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
-            <p className="text-lg font-medium">
+  // Step 3: Processing
+  if (step === "processing") {
+    return (
+      <div className="max-w-6xl mx-auto py-8">
+        <div className="flex flex-col items-center justify-center gap-6 py-20">
+          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          <div className="text-center space-y-2">
+            <p className="text-2xl font-headline font-bold text-slate-900">
               {STATUS_MESSAGES[statusIndex]}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-slate-500">
               Please wait while we process your recording.
             </p>
-          </CardContent>
-        </Card>
-      )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Step 2: Recording (main designer view)
+  return (
+    <div className="max-w-6xl mx-auto space-y-8 sm:space-y-12 py-4 sm:py-8">
+      {/* Header Status */}
+      <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75" />
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-destructive" />
+            </span>
+            <span className="text-xs font-bold text-destructive uppercase tracking-[0.2em]">
+              Live Recording
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-headline font-extrabold text-slate-900 tracking-tighter leading-none">
+            {selectedCustomer?.company ?? "Call Recording"}
+          </h2>
+          <p className="text-base sm:text-lg text-slate-500">
+            Sales Call • {selectedCustomer?.name}
+          </p>
+        </div>
+        <div className="text-left sm:text-right">
+          <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold mb-1">Duration</p>
+          <p className="text-4xl sm:text-5xl font-headline font-extrabold text-slate-900 tracking-tighter tabular-nums">
+            {formatTime(recordDuration)}
+          </p>
+        </div>
+      </div>
+
+      {/* Main Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
+        {/* Waveform & Controls */}
+        <div className="lg:col-span-8 space-y-6 sm:space-y-8">
+          <AudioRecorder onRecordingComplete={handleRecordingComplete} />
+        </div>
+
+        {/* Bookmarks Panel */}
+        <div className="lg:col-span-4">
+          <div className="bg-white p-6 sm:p-8 rounded-xl h-full flex flex-col shadow-sm">
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <h3 className="font-headline font-bold text-xl">Notes</h3>
+              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">
+                LIVE
+              </span>
+            </div>
+
+            {/* Quick Note Input */}
+            <div className="relative mb-6 sm:mb-8">
+              <textarea
+                className="w-full h-24 p-4 bg-slate-100 border-none rounded-xl resize-none text-sm focus:ring-2 focus:ring-primary/20 focus:outline-none"
+                placeholder="Add a quick note..."
+              />
+            </div>
+
+            {/* Placeholder Notes */}
+            <div className="flex-1 space-y-5 overflow-y-auto">
+              <div className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <div className="w-2 h-2 rounded-full bg-primary mt-2" />
+                  <div className="w-px h-full bg-slate-200 mt-2" />
+                </div>
+                <div className="pb-4">
+                  <p className="text-[10px] text-primary font-bold tracking-[0.15em] mb-1">
+                    RECORDING STARTED
+                  </p>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    Call with {selectedCustomer?.company ?? "customer"} has begun.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Action Buttons */}
+            <div className="pt-6 grid grid-cols-2 gap-3">
+              <button className="flex items-center justify-center gap-2 py-3 bg-slate-100 rounded-full text-xs font-bold text-slate-500 hover:bg-slate-200 transition-all">
+                Highlight
+              </button>
+              <button className="flex items-center justify-center gap-2 py-3 bg-slate-100 rounded-full text-xs font-bold text-slate-500 hover:bg-slate-200 transition-all">
+                Action Item
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Context Info Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8">
+        <div className="bg-slate-100 p-5 sm:p-6 rounded-xl flex items-center gap-4 sm:gap-6">
+          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary shrink-0">
+            <User className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-[10px] text-slate-400 font-bold tracking-[0.15em]">CONTACT</p>
+            <p className="text-sm font-headline font-bold text-slate-900">{selectedCustomer?.name ?? "—"}</p>
+          </div>
+        </div>
+        <div className="bg-slate-100 p-5 sm:p-6 rounded-xl flex items-center gap-4 sm:gap-6">
+          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary shrink-0">
+            <Building2 className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-[10px] text-slate-400 font-bold tracking-[0.15em]">ACCOUNT</p>
+            <p className="text-sm font-headline font-bold text-slate-900">{selectedCustomer?.company ?? "—"}</p>
+          </div>
+        </div>
+        <div className="bg-slate-100 p-5 sm:p-6 rounded-xl flex items-center gap-4 sm:gap-6 border-2 border-primary/10">
+          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+            <Zap className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-[10px] text-slate-400 font-bold tracking-[0.15em]">STATUS</p>
+            <p className="text-sm font-headline font-bold text-primary">Active Recording</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
