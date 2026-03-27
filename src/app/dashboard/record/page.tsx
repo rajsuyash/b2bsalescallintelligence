@@ -179,15 +179,17 @@ export default function RecordPage() {
       {/* Header Status */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-2 sm:gap-4">
         <div className="space-y-1 sm:space-y-2">
-          <div className="flex items-center gap-2 mb-1 sm:mb-4">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-destructive" />
-            </span>
-            <span className="text-xs font-bold text-destructive uppercase tracking-[0.2em]">
-              Live Recording
-            </span>
-          </div>
+          {timerActive && (
+            <div className="flex items-center gap-2 mb-1 sm:mb-4">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-destructive" />
+              </span>
+              <span className="text-xs font-bold text-destructive uppercase tracking-[0.2em]">
+                Live Recording
+              </span>
+            </div>
+          )}
           <h2 className="text-2xl sm:text-5xl font-headline font-extrabold text-slate-900 tracking-tighter leading-none">
             {selectedCustomer?.company ?? "Call Recording"}
           </h2>
