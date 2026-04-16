@@ -107,9 +107,12 @@ async function main() {
     prisma.customer.create({
       data: { id: "cust-jsw-001", name: "Prakash Rao", company: "JSW Steel", location: "Bangalore", phone: "+91-9876543217" },
     }),
+    prisma.customer.create({
+      data: { id: "cust-maccaferri-001", name: "Maccaferri Contact", company: "Maccaferri Environmental Solutions Pvt.Ltd", location: "Pune", phone: "+91-9876543218" },
+    }),
   ]);
 
-  const [tata, lnt, jindal, ambuja, godrej, adani, ultratech, jsw] = customers;
+  const [tata, lnt, jindal, ambuja, godrej, adani, ultratech, jsw, maccaferri] = customers;
 
   // Helper to create dates spread over last 30 days
   const daysAgo = (d: number) => new Date(Date.now() - d * 24 * 60 * 60 * 1000);
