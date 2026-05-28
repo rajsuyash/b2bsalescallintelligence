@@ -3,14 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { LayoutDashboard, Mic, Phone, Users, Plus } from "lucide-react";
+import { LayoutDashboard, Mic, Phone, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["rep", "manager", "admin"] },
   { href: "/dashboard/record", label: "Record Call", icon: Mic, roles: ["rep"] },
   { href: "/dashboard/calls", label: "All Calls", icon: Phone, roles: ["manager", "admin"] },
-  { href: "/dashboard/team", label: "Team", icon: Users, roles: ["admin"] },
 ];
 
 interface SidebarProps {
