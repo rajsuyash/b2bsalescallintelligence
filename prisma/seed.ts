@@ -4,13 +4,11 @@ import { hashSync } from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  // Clean existing data
-  await prisma.summary.deleteMany();
-  await prisma.transcript.deleteMany();
-  await prisma.call.deleteMany();
-  await prisma.customer.deleteMany();
-  await prisma.user.deleteMany();
-  await prisma.team.deleteMany();
+  const existing = await prisma.user.count();
+  if (existing > 0) {
+    console.log(`Seed skipped: DB already has ${existing} users.`);
+    return;
+  }
 
   const password = hashSync("demo123", 10);
 
