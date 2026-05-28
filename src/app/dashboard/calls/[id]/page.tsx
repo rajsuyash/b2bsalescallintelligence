@@ -51,6 +51,14 @@ const SEVERITY_CONFIG: Record<string, { color: string; label: string }> = {
 function FormattedTranscript({ text }: { text: string }) {
   const lines = text.split("\n").filter((line) => line.trim());
 
+  // First speaker in transcript = rep (blue), others = customer (amber)
+  const firstSpeaker = lines
+    .map((l) => {
+      const ci = l.indexOf(":");
+      return ci > 0 && ci < 40 ? l.slice(0, ci).trim().toLowerCase() : null;
+    })
+    .find((s) => s !== null);
+
   return (
     <div className="space-y-3">
       {lines.map((line, i) => {
@@ -58,15 +66,12 @@ function FormattedTranscript({ text }: { text: string }) {
         if (colonIndex > 0 && colonIndex < 40) {
           const speaker = line.slice(0, colonIndex).trim();
           const content = line.slice(colonIndex + 1).trim();
-          const isCustomer = speaker.toLowerCase().includes("customer") ||
-            speaker.toLowerCase().includes("suresh") ||
-            speaker.toLowerCase().includes("anil") ||
-            speaker.toLowerCase().includes("ramesh") ||
-            speaker.toLowerCase().includes("deepak") ||
-            speaker.toLowerCase().includes("kiran") ||
-            speaker.toLowerCase().includes("manoj") ||
-            speaker.toLowerCase().includes("sanjay") ||
-            speaker.toLowerCase().includes("prakash");
+          const lowerSpeaker = speaker.toLowerCase();
+          const isCustomer =
+            lowerSpeaker.includes("customer") ||
+            (firstSpeaker !== null &&
+              !lowerSpeaker.includes("sales rep") &&
+              lowerSpeaker !== firstSpeaker);
 
           return (
             <div key={i} className={`flex gap-3 ${i > 0 ? "pt-2" : ""}`}>
